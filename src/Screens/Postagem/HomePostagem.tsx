@@ -1,4 +1,4 @@
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const mockPosts = [
@@ -25,21 +25,15 @@ const mockPosts = [
   },
 ];
 
-export default function Posts() {
+export default function HomePostagem() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.header}>
-          <View>
-            <Text style={styles.title}>Minhas Publicacoes</Text>
-            <Text style={styles.subtitle}>
-              Lista de postagens com dados mockados
-            </Text>
-          </View>
-
-          <Pressable style={styles.createButton}>
-            <Text style={styles.createButtonText}>Criar Publicacao</Text>
-          </Pressable>
+          <Text style={styles.title}>Postagens</Text>
+          <Text style={styles.subtitle}>
+            Lista de postagens com dados mockados
+          </Text>
         </View>
 
         {mockPosts.map((post) => (
@@ -69,7 +63,7 @@ const styles = StyleSheet.create({
     gap: 18,
   },
   header: {
-    gap: 12,
+    gap: 6,
   },
   title: {
     fontSize: 28,
@@ -77,21 +71,8 @@ const styles = StyleSheet.create({
     color: "#222222",
   },
   subtitle: {
-    marginTop: 4,
     fontSize: 14,
     color: "#5E5E5E",
-  },
-  createButton: {
-    alignSelf: "flex-start",
-    backgroundColor: "#1E63D5",
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 8,
-  },
-  createButtonText: {
-    color: "#FFFFFF",
-    fontSize: 14,
-    fontWeight: "600",
   },
   card: {
     flexDirection: "row",
