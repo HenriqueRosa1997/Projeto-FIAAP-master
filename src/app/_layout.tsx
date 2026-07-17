@@ -1,26 +1,25 @@
 import { Stack } from "expo-router";
+import AppHeader from "@/components/AppHeader";
 
 export default function RootLayout() {
   return (
-    <Stack>
+    <Stack screenOptions={{ headerShadowVisible: false }}>
       <Stack.Screen
-        name="professor/index"
+        name="professor"
         options={{
-          title: "Professor",
+          header: () => <AppHeader title="Professor" />,
         }}
       />
-
       <Stack.Screen
-        name="aluno/index"
+        name="postagemAll"
         options={{
-          title: "Aluno",
+          header: () => <AppHeader title="Postagens" />,
         }}
       />
-
       <Stack.Screen
-        name="Login/Login"
+        name="login"
         options={{
-          title: "Login",
+          header: () => <AppHeader title="Login" />,
         }}
       />
     </Stack>

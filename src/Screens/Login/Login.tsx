@@ -12,7 +12,7 @@ export function Login() {
     if (tipoUsuario === "PROFESSOR") {
       router.replace("/professor");
     } else {
-      router.replace("/aluno");
+      router.replace("/postagemAll");
     }
   }
 
