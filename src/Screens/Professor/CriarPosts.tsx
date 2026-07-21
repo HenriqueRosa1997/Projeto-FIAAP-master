@@ -1,9 +1,5 @@
-import { Text, View } from "react-native";
+import PostagemFormScreen from "@/features/postagem/screens/PostagemFormScreen";
 
 export default function CriarPost() {
-  return (
-    <View>
-      <Text>Criar Publicação</Text>
-    </View>
-  );
+  return <PostagemFormScreen mode="create" />;
 }
