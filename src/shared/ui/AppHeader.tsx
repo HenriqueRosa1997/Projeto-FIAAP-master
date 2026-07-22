@@ -1,13 +1,26 @@
+import { useAuth } from "@/shared/context/AuthContext";
 import { router } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 type AppHeaderProps = {
   title: string;
 };
 
 export default function AppHeader({ title }: AppHeaderProps) {
+  const { user, logout } = useAuth();
+
+  async function handleAuthAction() {
+    if (user) {
+      await logout();
+      router.replace("/login");
+      return;
+    }
+
+    router.push("/login");
+  }
+
   return (
     <SafeAreaView edges={["top"]} style={styles.safeArea}>
       <View style={styles.header}>
@@ -29,9 +42,9 @@ export default function AppHeader({ title }: AppHeaderProps) {
 
             <TouchableOpacity
               style={styles.button}
-              onPress={() => router.push("/login")}
+              onPress={handleAuthAction}
             >
-              <Text style={styles.buttonText}>Login</Text>
+              <Text style={styles.buttonText}>{user ? "Sair" : "Login"}</Text>
             </TouchableOpacity>
           </View>
         </View>

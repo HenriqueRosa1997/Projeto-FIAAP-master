@@ -1,5 +1,7 @@
+import { AuthProvider, useAuth } from "@/shared/context/AuthContext";
 import AppHeader from "@/shared/ui/AppHeader";
-import { Stack } from "expo-router";
+import { Stack, useRouter, useSegments } from "expo-router";
+import { useEffect } from "react";
 
 function getHeaderTitle(routeName: string) {
   const titles: Record<string, string> = {
@@ -25,6 +27,41 @@ function getHeaderTitle(routeName: string) {
 }
 
 export default function RootLayout() {
+  return (
+    <AuthProvider>
+      <RootStack />
+    </AuthProvider>
+  );
+}
+
+function RootStack() {
+  const router = useRouter();
+  const segments = useSegments();
+  const { user, initializing } = useAuth();
+
+  useEffect(() => {
+    if (initializing) {
+      return;
+    }
+
+    const firstSegment = segments[0];
+    const inProfessorArea = firstSegment === "professor";
+    const inLoginScreen = firstSegment === "login";
+
+    if (!user && inProfessorArea) {
+      router.replace("/login");
+      return;
+    }
+
+    if (user && inLoginScreen) {
+      router.replace("/professor");
+    }
+  }, [initializing, router, segments, user]);
+
+  if (initializing) {
+    return null;
+  }
+
   return (
     <Stack
       screenOptions={({ route }) => ({

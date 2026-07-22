@@ -1,18 +1,26 @@
+import { useAuth } from "@/shared/context/AuthContext";
 import { router } from "expo-router";
 import { useState } from "react";
-import { Button, StyleSheet, TextInput, View } from "react-native";
+import { ActivityIndicator, Button, StyleSheet, Text, TextInput, View } from "react-native";
 
 export function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
 
   async function entrar() {
-    const tipoUsuario = "PROFESSOR";
+    setLoading(true);
+    setErrorMessage("");
 
-    if (tipoUsuario === "PROFESSOR") {
+    try {
+      await login(email.trim(), senha);
       router.replace("/professor");
-    } else {
-      router.replace("/postagemAll");
+    } catch {
+      setErrorMessage("Não foi possível entrar. Verifique seu email e senha.");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -33,7 +41,13 @@ export function Login() {
         onChangeText={setSenha}
       />
 
-      <Button title="Entrar" onPress={entrar} />
+      {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null}
+
+      {loading ? (
+        <ActivityIndicator size="small" color="#1565C0" />
+      ) : (
+        <Button title="Entrar" onPress={entrar} />
+      )}
     </View>
   );
 }
@@ -52,5 +66,9 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginBottom: 12,
     paddingHorizontal: 12,
+  },
+  error: {
+    color: "#C62828",
+    marginBottom: 12,
   },
 });
