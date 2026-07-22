@@ -4,7 +4,6 @@ import EntityCard from "@/shared/ui/EntityCard";
 import ScreenContainer from "@/shared/ui/ScreenContainer";
 import SectionHeader from "@/shared/ui/SectionHeader";
 import { useRouter } from "expo-router";
-import { StyleSheet, View } from "react-native";
 
 export default function PostagemFeedScreen() {
   const router = useRouter();
@@ -12,10 +11,7 @@ export default function PostagemFeedScreen() {
 
   return (
     <ScreenContainer>
-      <SectionHeader
-        title="Postagens"
-        subtitle="Mural principal com dados mockados para os alunos visualizarem"
-      />
+      <SectionHeader title="Postagens" />
 
       {postagens.map((postagem) => (
         <EntityCard
@@ -23,14 +19,16 @@ export default function PostagemFeedScreen() {
           title={postagem.titulo}
           subtitle={`Autor: ${postagem.autor}`}
           description={postagem.resumo}
-          badge={postagem.status}
-          leading={<View style={styles.thumbnail} />}
-          onTitlePress={() => router.push(`/postagemAll/${postagem.id}` as const)}
+          onTitlePress={() =>
+            router.push(`/postagemAll/${postagem.id}` as const)
+          }
           actions={
             <ActionButton
               label="Visualizar"
               variant="secondary"
-              onPress={() => router.push(`/postagemAll/${postagem.id}` as const)}
+              onPress={() =>
+                router.push(`/postagemAll/${postagem.id}` as const)
+              }
             />
           }
         />
@@ -38,12 +36,3 @@ export default function PostagemFeedScreen() {
     </ScreenContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  thumbnail: {
-    width: 120,
-    height: 120,
-    backgroundColor: "#D9D9D9",
-    flexShrink: 0,
-  },
-});

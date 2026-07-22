@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "expo-router";
 import { removeProfessor } from "@/features/professor/store/professorStore";
 import { Professor } from "@/shared/types/entities";
 import ActionButton from "@/shared/ui/ActionButton";
@@ -7,6 +5,8 @@ import ConfirmActionModal from "@/shared/ui/ConfirmActionModal";
 import EntityDetails from "@/shared/ui/EntityDetails";
 import ScreenContainer from "@/shared/ui/ScreenContainer";
 import StatusBanner from "@/shared/ui/StatusBanner";
+import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 
 type ProfessorDetailsScreenProps = {
   professor?: Professor;
@@ -36,7 +36,7 @@ export default function ProfessorDetailsScreen({
       <ConfirmActionModal
         visible={modalAberto}
         title="Excluir professor"
-        message="Deseja realmente excluir este professor? Esta acao e mockada e atualiza a listagem imediatamente."
+        message="Deseja realmente excluir este professor?"
         confirmLabel="Excluir"
         onCancel={() => setModalAberto(false)}
         onConfirm={() => {
@@ -53,7 +53,6 @@ export default function ProfessorDetailsScreen({
 
       <EntityDetails
         title="Detalhes do Professor"
-        subtitle="Estrutura generica pronta para a futura camada de servicos"
         topContent={
           foiExcluido ? (
             <StatusBanner message="Professor excluido com sucesso. Retornando para a listagem..." />
@@ -63,7 +62,6 @@ export default function ProfessorDetailsScreen({
           { label: "Nome", value: professor?.nome ?? "-" },
           { label: "Email", value: professor?.email ?? "-" },
           { label: "Especialidade", value: professor?.especialidade ?? "-" },
-          { label: "Status", value: professor?.status ?? "-" },
         ]}
         footer={
           <>

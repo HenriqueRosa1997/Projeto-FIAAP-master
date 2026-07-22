@@ -8,9 +8,8 @@ export const mockPostagens: Postagem[] = [
     resumo:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sed lectus a turpis pulvinar vulputate eu et felis. Donec varius nibh vel risus interdum mattis.",
     conteudo:
-      "Conteudo completo da postagem com mais detalhes para futura tela de visualizacao e integracao com backend.",
+      "Conteudo completo da postagem com mais detalhes para consulta dos alunos no mural principal.",
     categoria: "Comunicados",
-    status: "Publicado",
   },
   {
     id: "2",
@@ -21,7 +20,6 @@ export const mockPostagens: Postagem[] = [
     conteudo:
       "Agenda detalhada com atividades, datas e lembretes para os alunos acompanharem no mural principal.",
     categoria: "Agenda",
-    status: "Publicado",
   },
   {
     id: "3",
@@ -32,6 +30,5 @@ export const mockPostagens: Postagem[] = [
     conteudo:
       "Lista de materiais complementares sugeridos para aprofundar o conteudo trabalhado nas aulas.",
     categoria: "Materiais",
-    status: "Rascunho",
   },
 ];

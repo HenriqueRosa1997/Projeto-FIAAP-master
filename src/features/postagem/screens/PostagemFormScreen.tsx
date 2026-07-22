@@ -61,7 +61,7 @@ export default function PostagemFormScreen({
     <ScreenContainer>
       <EntityForm
         title={mode === "create" ? "Cadastrar Postagem" : "Editar Postagem"}
-        subtitle="Componente compartilhado de formulario com regras especificas do modulo de postagem"
+        subtitle="Preencha os dados da postagem"
         fields={postagemFields}
         initialValues={{
           titulo: mode === "edit" ? (postagem?.titulo ?? "") : "",
@@ -83,9 +83,6 @@ export default function PostagemFormScreen({
             conteudo: values.conteudo,
             resumo:
               values.conteudo.slice(0, 120).trim() || "Resumo da postagem",
-            status: (postagem?.status ?? "Publicado") as
-              | "Publicado"
-              | "Rascunho",
           };
 
           if (mode === "create") {

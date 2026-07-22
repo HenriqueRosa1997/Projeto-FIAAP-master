@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 
 type EntityDetailsProps = {
   title: string;
-  subtitle: string;
+  subtitle?: string;
   items: DetailItem[];
   topContent?: ReactNode;
   footer?: ReactNode;
@@ -23,7 +23,7 @@ export default function EntityDetails({
 
       <View style={styles.header}>
         <Text style={styles.title}>{title}</Text>
-        <Text style={styles.subtitle}>{subtitle}</Text>
+        {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
       </View>
 
       {items.map((item) => (
@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F7F7F7",
     borderWidth: 1,
     borderColor: "#D7D7D7",
+    borderRadius: 16,
     padding: 18,
     gap: 14,
     shadowColor: "#000000",

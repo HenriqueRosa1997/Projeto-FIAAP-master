@@ -5,7 +5,7 @@ import { StyleSheet, Text, TextInput, View } from "react-native";
 
 type EntityFormProps = {
   title: string;
-  subtitle: string;
+  subtitle?: string;
   fields: FormFieldConfig[];
   initialValues: Record<string, string>;
   primaryActionLabel: string;
@@ -36,7 +36,7 @@ export default function EntityForm({
 
       <View style={styles.header}>
         <Text style={styles.title}>{title}</Text>
-        <Text style={styles.subtitle}>{subtitle}</Text>
+        {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
       </View>
 
       {orderedFields.map((field) => (
@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F7F7F7",
     borderWidth: 1,
     borderColor: "#D7D7D7",
+    borderRadius: 16,
     padding: 18,
     gap: 14,
     shadowColor: "#000000",

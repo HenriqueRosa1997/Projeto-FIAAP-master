@@ -55,7 +55,7 @@ export default function ProfessorFormScreen({
     <ScreenContainer>
       <EntityForm
         title={mode === "create" ? "Cadastrar Professor" : "Editar Professor"}
-        subtitle="Formulario compartilhado com configuracao de campos especifica do modulo de professor"
+        subtitle="Preencha os dados do professor"
         fields={professorFields}
         initialValues={{
           nome: mode === "edit" ? (professor?.nome ?? "") : "",
@@ -76,7 +76,6 @@ export default function ProfessorFormScreen({
             nome: values.nome,
             email: values.email,
             especialidade: values.especialidade,
-            status: (professor?.status ?? "Ativo") as "Ativo" | "Inativo",
           };
 
           if (mode === "create") {

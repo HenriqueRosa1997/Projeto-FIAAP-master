@@ -31,10 +31,7 @@ export default function PostagemListScreen() {
   return (
     <ScreenContainer>
       <View style={styles.headerRow}>
-        <SectionHeader
-          title="Minhas Publicacoes"
-          subtitle="Lista de postagens mockadas para gerenciamento"
-        />
+        <SectionHeader title="Minhas Publicacoes" />
         <ActionButton
           label="Criar Publicacao"
           onPress={() => router.push("/professor/postagens/criar")}
@@ -53,8 +50,6 @@ export default function PostagemListScreen() {
           title={postagem.titulo}
           subtitle={`Autor: ${postagem.autor}`}
           description={postagem.resumo}
-          badge={postagem.status}
-          leading={<View style={styles.thumbnail} />}
           onTitlePress={() =>
             router.push(`/professor/postagens/${postagem.id}` as const)
           }
@@ -92,12 +87,6 @@ export default function PostagemListScreen() {
 const styles = StyleSheet.create({
   headerRow: {
     gap: 12,
-  },
-  thumbnail: {
-    width: 120,
-    height: 120,
-    backgroundColor: "#D9D9D9",
-    flexShrink: 0,
   },
   emptyState: {
     fontSize: 15,

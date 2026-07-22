@@ -5,7 +5,6 @@ export type Postagem = {
   resumo: string;
   conteudo: string;
   categoria: string;
-  status: "Publicado" | "Rascunho";
 };
 
 export type Professor = {
@@ -13,7 +12,6 @@ export type Professor = {
   nome: string;
   email: string;
   especialidade: string;
-  status: "Ativo" | "Inativo";
 };
 
 export type Aluno = {
@@ -21,7 +19,6 @@ export type Aluno = {
   nome: string;
   email: string;
   turma: string;
-  status: "Ativo" | "Inativo";
 };
 
 export type FormFieldConfig = {

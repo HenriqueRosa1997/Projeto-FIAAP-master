@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F7F7F7",
     borderWidth: 1,
     borderColor: "#D7D7D7",
+    borderRadius: 16,
     padding: 16,
     gap: 16,
     shadowColor: "#000000",
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     gap: 10,
-    justifyContent: "center",
+    justifyContent: "flex-start",
   },
   titleRow: {
     flexDirection: "row",

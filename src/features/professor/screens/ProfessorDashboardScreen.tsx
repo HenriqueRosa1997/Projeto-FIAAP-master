@@ -54,8 +54,6 @@ export default function ProfessorDashboardScreen() {
             title={postagemEmDestaque.titulo}
             subtitle={`Autor: ${postagemEmDestaque.autor}`}
             description={postagemEmDestaque.resumo}
-            badge={postagemEmDestaque.status}
-            leading={<View style={styles.thumbnail} />}
           />
         ) : null}
       </View>
@@ -89,7 +87,6 @@ export default function ProfessorDashboardScreen() {
             title={professorEmDestaque.nome}
             subtitle={professorEmDestaque.email}
             description={`Especialidade: ${professorEmDestaque.especialidade}`}
-            badge={professorEmDestaque.status}
           />
         ) : null}
       </View>
@@ -122,8 +119,7 @@ export default function ProfessorDashboardScreen() {
           <EntityCard
             title={alunoEmDestaque.nome}
             subtitle={`${alunoEmDestaque.email} • ${alunoEmDestaque.turma}`}
-            description={`Status atual do aluno: ${alunoEmDestaque.status}`}
-            badge={alunoEmDestaque.status}
+            description={`Turma: ${alunoEmDestaque.turma}`}
           />
         ) : null}
       </View>
@@ -142,10 +138,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 12,
     flexWrap: "wrap",
-  },
-  thumbnail: {
-    width: 120,
-    height: 120,
-    backgroundColor: "#D9D9D9",
   },
 });

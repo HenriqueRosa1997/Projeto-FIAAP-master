@@ -21,7 +21,7 @@ export default function AlunoListScreen() {
     }
 
     return alunos.filter((aluno) =>
-      [aluno.nome, aluno.email, aluno.turma, aluno.status]
+      [aluno.nome, aluno.email, aluno.turma]
         .join(" ")
         .toLowerCase()
         .includes(termo),
@@ -31,10 +31,7 @@ export default function AlunoListScreen() {
   return (
     <ScreenContainer>
       <View style={styles.headerRow}>
-        <SectionHeader
-          title="Alunos"
-          subtitle="Modulo especifico de alunos utilizando UI compartilhada"
-        />
+        <SectionHeader title="Alunos" />
         <ActionButton
           label="Cadastrar Aluno"
           onPress={() => router.push("/professor/alunos/criar")}
@@ -44,7 +41,7 @@ export default function AlunoListScreen() {
       <SearchField
         value={busca}
         onChangeText={setBusca}
-        placeholder="Buscar por nome, email, turma ou status"
+        placeholder="Buscar por nome, email ou turma"
       />
 
       {alunosFiltrados.map((aluno) => (
@@ -52,8 +49,7 @@ export default function AlunoListScreen() {
           key={aluno.id}
           title={aluno.nome}
           subtitle={`${aluno.email} • ${aluno.turma}`}
-          description={`Status atual do aluno: ${aluno.status}`}
-          badge={aluno.status}
+          description={`Turma: ${aluno.turma}`}
           onTitlePress={() =>
             router.push(`/professor/alunos/${aluno.id}` as const)
           }
