@@ -54,7 +54,6 @@ export default function ProfessorDashboardScreen() {
             title={postagemEmDestaque.titulo}
             subtitle={`Autor: ${postagemEmDestaque.autor}`}
             description={postagemEmDestaque.resumo}
-            leading={<View style={styles.thumbnail} />}
           />
         ) : null}
       </View>
@@ -139,10 +138,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 12,
     flexWrap: "wrap",
-  },
-  thumbnail: {
-    width: 120,
-    height: 120,
-    backgroundColor: "#D9D9D9",
   },
 });

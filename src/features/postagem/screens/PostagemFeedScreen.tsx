@@ -4,7 +4,6 @@ import EntityCard from "@/shared/ui/EntityCard";
 import ScreenContainer from "@/shared/ui/ScreenContainer";
 import SectionHeader from "@/shared/ui/SectionHeader";
 import { useRouter } from "expo-router";
-import { StyleSheet, View } from "react-native";
 
 export default function PostagemFeedScreen() {
   const router = useRouter();
@@ -20,7 +19,6 @@ export default function PostagemFeedScreen() {
           title={postagem.titulo}
           subtitle={`Autor: ${postagem.autor}`}
           description={postagem.resumo}
-          leading={<View style={styles.thumbnail} />}
           onTitlePress={() =>
             router.push(`/postagemAll/${postagem.id}` as const)
           }
@@ -38,12 +36,3 @@ export default function PostagemFeedScreen() {
     </ScreenContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  thumbnail: {
-    width: 120,
-    height: 120,
-    backgroundColor: "#D9D9D9",
-    flexShrink: 0,
-  },
-});
