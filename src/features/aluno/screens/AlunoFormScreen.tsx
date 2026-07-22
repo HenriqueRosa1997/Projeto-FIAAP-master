@@ -49,7 +49,7 @@ export default function AlunoFormScreen({ mode, aluno }: AlunoFormScreenProps) {
     <ScreenContainer>
       <EntityForm
         title={mode === "create" ? "Cadastrar Aluno" : "Editar Aluno"}
-        subtitle="Formulario generico com campos definidos pelo modulo de aluno"
+        subtitle="Preencha os dados do aluno"
         fields={alunoFields}
         initialValues={{
           nome: mode === "edit" ? (aluno?.nome ?? "") : "",
@@ -67,7 +67,6 @@ export default function AlunoFormScreen({ mode, aluno }: AlunoFormScreenProps) {
             nome: values.nome,
             email: values.email,
             turma: values.turma,
-            status: (aluno?.status ?? "Ativo") as "Ativo" | "Inativo",
           };
 
           if (mode === "create") {

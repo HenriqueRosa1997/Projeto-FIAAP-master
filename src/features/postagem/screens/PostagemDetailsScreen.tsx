@@ -41,7 +41,7 @@ export default function PostagemDetailsScreen({
         <ConfirmActionModal
           visible={modalAberto}
           title="Excluir postagem"
-          message="Deseja realmente excluir esta postagem? Esta acao e mockada e atualiza a listagem imediatamente."
+          message="Deseja realmente excluir esta postagem?"
           confirmLabel="Excluir"
           onCancel={() => setModalAberto(false)}
           onConfirm={() => {
@@ -59,7 +59,6 @@ export default function PostagemDetailsScreen({
 
       <EntityDetails
         title="Detalhes da Postagem"
-        subtitle="Exemplo de tela especifica consumindo componente compartilhado de detalhes"
         topContent={
           foiExcluida ? (
             <StatusBanner message="Postagem excluida com sucesso. Retornando para a listagem..." />
@@ -69,7 +68,6 @@ export default function PostagemDetailsScreen({
           { label: "Titulo", value: postagem?.titulo ?? "-" },
           { label: "Autor", value: postagem?.autor ?? "-" },
           { label: "Categoria", value: postagem?.categoria ?? "-" },
-          { label: "Status", value: postagem?.status ?? "-" },
           { label: "Conteudo", value: postagem?.conteudo ?? "-" },
         ]}
         footer={

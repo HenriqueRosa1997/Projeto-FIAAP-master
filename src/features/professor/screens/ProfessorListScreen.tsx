@@ -21,7 +21,7 @@ export default function ProfessorListScreen() {
     }
 
     return professores.filter((professor) =>
-      [professor.nome, professor.email, professor.especialidade, professor.status]
+      [professor.nome, professor.email, professor.especialidade]
         .join(" ")
         .toLowerCase()
         .includes(termo),
@@ -31,10 +31,7 @@ export default function ProfessorListScreen() {
   return (
     <ScreenContainer>
       <View style={styles.headerRow}>
-        <SectionHeader
-          title="Professores"
-          subtitle="CRUD de professores organizado em feature especifica"
-        />
+        <SectionHeader title="Professores" />
         <ActionButton
           label="Cadastrar Professor"
           onPress={() => router.push("/professor/professores/criar")}
@@ -44,7 +41,7 @@ export default function ProfessorListScreen() {
       <SearchField
         value={busca}
         onChangeText={setBusca}
-        placeholder="Buscar por nome, email, especialidade ou status"
+        placeholder="Buscar por nome, email ou especialidade"
       />
 
       {professoresFiltrados.map((professor) => (
@@ -53,7 +50,6 @@ export default function ProfessorListScreen() {
           title={professor.nome}
           subtitle={professor.email}
           description={`Especialidade: ${professor.especialidade}`}
-          badge={professor.status}
           onTitlePress={() =>
             router.push(`/professor/professores/${professor.id}` as const)
           }

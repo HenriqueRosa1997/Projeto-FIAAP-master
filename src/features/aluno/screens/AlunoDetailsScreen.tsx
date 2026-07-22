@@ -34,7 +34,7 @@ export default function AlunoDetailsScreen({ aluno }: AlunoDetailsScreenProps) {
       <ConfirmActionModal
         visible={modalAberto}
         title="Excluir aluno"
-        message="Deseja realmente excluir este aluno? Esta acao e mockada e atualiza a listagem imediatamente."
+        message="Deseja realmente excluir este aluno?"
         confirmLabel="Excluir"
         onCancel={() => setModalAberto(false)}
         onConfirm={() => {
@@ -51,7 +51,6 @@ export default function AlunoDetailsScreen({ aluno }: AlunoDetailsScreenProps) {
 
       <EntityDetails
         title="Detalhes do Aluno"
-        subtitle="Estrutura pronta para futura integracao com backend"
         topContent={
           foiExcluido ? (
             <StatusBanner message="Aluno excluido com sucesso. Retornando para a listagem..." />
@@ -61,7 +60,6 @@ export default function AlunoDetailsScreen({ aluno }: AlunoDetailsScreenProps) {
           { label: "Nome", value: aluno?.nome ?? "-" },
           { label: "Email", value: aluno?.email ?? "-" },
           { label: "Turma", value: aluno?.turma ?? "-" },
-          { label: "Status", value: aluno?.status ?? "-" },
         ]}
         footer={
           <>
