@@ -1,32 +1,85 @@
-import { auth } from "@/services/firebase";
 import {
   User,
+  getIdTokenResult,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 import { ReactNode, createContext, useContext, useEffect, useMemo, useState } from "react";
+import { auth, db } from "../../services/firebase";
 
 type AuthContextValue = {
   user: User | null;
   initializing: boolean;
+  canAccessProfessorArea: boolean;
+  isAdmin: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 };
+
+async function isUserAdmin(user: User) {
+  const tokenResult = await getIdTokenResult(user, true);
+  return tokenResult.claims.role === "admin";
+}
+
+async function isProfessor(user: User) {
+  const tokenResult = await getIdTokenResult(user, true);
+
+  if (tokenResult.claims.role === "admin" || tokenResult.claims.role === "teacher") {
+    return true;
+  }
+
+  const profile = await getDoc(doc(db, "professores", user.uid));
+  return profile.exists();
+}
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [initializing, setInitializing] = useState(true);
+  const [canAccessProfessorArea, setCanAccessProfessorArea] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    let cancelled = false;
+
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setInitializing(true);
       setUser(currentUser);
-      setInitializing(false);
+
+      if (!currentUser) {
+        setCanAccessProfessorArea(false);
+        setIsAdmin(false);
+        setInitializing(false);
+        return;
+      }
+
+      try {
+        const [userIsAdmin, userIsProfessor] = await Promise.all([
+          isUserAdmin(currentUser),
+          isProfessor(currentUser),
+        ]);
+
+        if (!cancelled) {
+          setCanAccessProfessorArea(userIsAdmin || userIsProfessor);
+          setIsAdmin(userIsAdmin);
+          setInitializing(false);
+        }
+      } catch {
+        if (!cancelled) {
+          setCanAccessProfessorArea(false);
+          setIsAdmin(false);
+          setInitializing(false);
+        }
+      }
     });
 
-    return unsubscribe;
+    return () => {
+      cancelled = true;
+      unsubscribe();
+    };
   }, []);
 
   async function login(email: string, password: string) {
@@ -38,8 +91,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const value = useMemo(
-    () => ({ user, initializing, login, logout }),
-    [user, initializing],
+    () => ({ user, initializing, canAccessProfessorArea, isAdmin, login, logout }),
+    [user, initializing, canAccessProfessorArea, isAdmin],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
