@@ -1,7 +1,7 @@
 import {
-    createProfessor,
     updateProfessor,
 } from "@/features/professor/store/professorStore";
+import { createProfessorWithAccount } from "@/features/professor/repository/professorAuthRepository";
 import { FormFieldConfig, Professor } from "@/shared/types/entities";
 import EntityForm from "@/shared/ui/EntityForm";
 import ScreenContainer from "@/shared/ui/ScreenContainer";
@@ -19,6 +19,8 @@ const professorFields: FormFieldConfig[] = [
     name: "email",
     label: "Email",
     placeholder: "Digite o email do professor",
+    autoCapitalize: "none",
+    keyboardType: "email-address",
   },
   {
     name: "especialidade",
@@ -26,6 +28,14 @@ const professorFields: FormFieldConfig[] = [
     placeholder: "Ex: React Native",
   },
 ];
+
+const passwordField: FormFieldConfig = {
+  name: "senha",
+  label: "Senha inicial",
+  placeholder: "Crie uma senha com ao menos 6 caracteres",
+  secureTextEntry: true,
+  autoCapitalize: "none",
+};
 
 type ProfessorFormScreenProps = {
   mode: "create" | "edit";
@@ -51,17 +61,29 @@ export default function ProfessorFormScreen({
     return () => clearTimeout(timeout);
   }, [mensagemSucesso, router]);
 
+  if (mode === "edit" && !professor) {
+    return (
+      <ScreenContainer>
+        <StatusBanner message="Professor não encontrado." variant="error" />
+      </ScreenContainer>
+    );
+  }
+
+  const professorAtual = professor;
+  const fields = mode === "create" ? [...professorFields, passwordField] : professorFields;
+
   return (
     <ScreenContainer>
       <EntityForm
         title={mode === "create" ? "Cadastrar Professor" : "Editar Professor"}
-        subtitle="Preencha os dados do professor"
-        fields={professorFields}
+        subtitle={mode === "create" ? "Os dados também criam o acesso de login" : "Atualize os dados do professor"}
+        fields={fields}
         initialValues={{
           nome: mode === "edit" ? (professor?.nome ?? "") : "",
           email: mode === "edit" ? (professor?.email ?? "") : "",
           especialidade:
             mode === "edit" ? (professor?.especialidade ?? "") : "",
+          senha: "",
         }}
         primaryActionLabel={
           mode === "create" ? "Salvar Professor" : "Atualizar"
@@ -71,7 +93,7 @@ export default function ProfessorFormScreen({
             <StatusBanner message={mensagemSucesso} />
           ) : undefined
         }
-        onPrimaryPress={(values) => {
+        onPrimaryPress={async (values) => {
           const payload = {
             nome: values.nome,
             email: values.email,
@@ -79,16 +101,14 @@ export default function ProfessorFormScreen({
           };
 
           if (mode === "create") {
-            createProfessor(payload);
+            await createProfessorWithAccount({ ...payload, senha: values.senha });
             setMensagemSucesso(
               "Professor salvo com sucesso. Retornando para a listagem...",
             );
             return;
           }
 
-          if (professor) {
-            updateProfessor(professor.id, payload);
-          }
+          await updateProfessor(professorAtual!.id, payload);
 
           setMensagemSucesso(
             "Professor atualizado com sucesso. Retornando para a listagem...",

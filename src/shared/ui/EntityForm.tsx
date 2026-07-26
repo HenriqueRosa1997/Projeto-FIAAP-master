@@ -10,7 +10,7 @@ type EntityFormProps = {
   initialValues: Record<string, string>;
   primaryActionLabel: string;
   topContent?: ReactNode;
-  onPrimaryPress?: (values: Record<string, string>) => void;
+  onPrimaryPress?: (values: Record<string, string>) => Promise<void> | void;
   onSecondaryPress?: () => void;
   secondaryActionLabel?: string;
 };
@@ -27,8 +27,26 @@ export default function EntityForm({
   secondaryActionLabel = "Voltar",
 }: EntityFormProps) {
   const [values, setValues] = useState(initialValues);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   const orderedFields = useMemo(() => fields, [fields]);
+
+  async function submit() {
+    setSubmitting(true);
+    setError("");
+    try {
+      await onPrimaryPress?.(values);
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível salvar. Verifique sua conexão e tente novamente.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <View style={styles.card}>
@@ -46,6 +64,9 @@ export default function EntityForm({
             value={values[field.name] ?? ""}
             placeholder={field.placeholder}
             multiline={field.multiline}
+            secureTextEntry={field.secureTextEntry}
+            autoCapitalize={field.autoCapitalize}
+            keyboardType={field.keyboardType}
             onChangeText={(text) =>
               setValues((current) => ({ ...current, [field.name]: text }))
             }
@@ -54,10 +75,13 @@ export default function EntityForm({
         </View>
       ))}
 
+      {error ? <Text style={styles.error}>{error}</Text> : null}
+
       <View style={styles.actions}>
         <ActionButton
           label={primaryActionLabel}
-          onPress={() => onPrimaryPress?.(values)}
+          onPress={submit}
+          disabled={submitting}
         />
         <ActionButton
           label={secondaryActionLabel}
@@ -122,4 +146,5 @@ const styles = StyleSheet.create({
     gap: 12,
     marginTop: 4,
   },
+  error: { color: "#B42318", fontSize: 14 },
 });

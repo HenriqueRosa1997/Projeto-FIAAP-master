@@ -1,5 +1,5 @@
-import CriarAluno from "@/Screens/Professor/CriarAluno";
+import AlunoFormScreen from "@/features/aluno/screens/AlunoFormScreen";
 
 export default function CriarAlunoPage() {
-  return <CriarAluno />;
+  return <AlunoFormScreen mode="create" />;
 }

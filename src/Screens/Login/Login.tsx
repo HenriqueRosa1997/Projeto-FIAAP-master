@@ -1,14 +1,13 @@
 import { useAuth } from "@/shared/context/AuthContext";
-import { router } from "expo-router";
 import { SymbolView } from "expo-symbols";
 import { useState } from "react";
 import {
-    ActivityIndicator,
-    Pressable,
-    StyleSheet,
-    Text,
-    TextInput,
-    View,
+  ActivityIndicator,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
 } from "react-native";
 
 export function Login() {
@@ -25,7 +24,6 @@ export function Login() {
 
     try {
       await login(email.trim(), senha);
-      router.replace("/professor");
     } catch {
       setErrorMessage("Não foi possível entrar. Verifique seu email e senha.");
     } finally {
@@ -36,7 +34,7 @@ export function Login() {
   return (
     <View style={styles.container}>
       <View style={styles.formCard}>
-        <Text style={styles.title}>Acessar Conta</Text>
+        <Text style={styles.title}>Área do professor</Text>
 
         <TextInput
           style={styles.input}
@@ -69,15 +67,15 @@ export function Login() {
               name={
                 mostrarSenha
                   ? {
-                      ios: "eye.slash",
-                      android: "visibility_off",
-                      web: "visibility_off",
-                    }
+                    ios: "eye.slash",
+                    android: "visibility_off",
+                    web: "visibility_off",
+                  }
                   : {
-                      ios: "eye",
-                      android: "visibility",
-                      web: "visibility",
-                    }
+                    ios: "eye",
+                    android: "visibility",
+                    web: "visibility",
+                  }
               }
               size={20}
               tintColor="#6B7280"

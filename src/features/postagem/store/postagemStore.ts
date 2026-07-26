@@ -1,28 +1,27 @@
-import { mockPostagens } from "@/features/postagem/mocks/postagens";
-import { createMockCrudStore } from "@/shared/state/createMockCrudStore";
+import { postagemRepository } from "@/features/postagem/repository/postagemRepository";
 import { Postagem } from "@/shared/types/entities";
 
-const postagemStore = createMockCrudStore<Postagem>(mockPostagens);
-
 export function usePostagens() {
-  return postagemStore.useItems();
+  return postagemRepository.useItems();
 }
 
+export function usePostagensStatus() { return postagemRepository.useStatus(); }
+
 export function getPostagemById(id: string) {
-  return postagemStore.getById(id);
+  return postagemRepository.getById(id);
 }
 
 export function createPostagem(item: Omit<Postagem, "id"> & { id?: string }) {
-  return postagemStore.create(item);
+  return postagemRepository.create(item);
 }
 
 export function updatePostagem(
   id: string,
   updates: Partial<Omit<Postagem, "id">>,
 ) {
-  return postagemStore.update(id, updates);
+  return postagemRepository.update(id, updates);
 }
 
 export function removePostagem(id: string) {
-  postagemStore.remove(id);
+  return postagemRepository.remove(id);
 }

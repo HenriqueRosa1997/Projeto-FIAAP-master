@@ -45,6 +45,16 @@ export default function AlunoFormScreen({ mode, aluno }: AlunoFormScreenProps) {
     return () => clearTimeout(timeout);
   }, [mensagemSucesso, router]);
 
+  if (mode === "edit" && !aluno) {
+    return (
+      <ScreenContainer>
+        <StatusBanner message="Aluno não encontrado." variant="error" />
+      </ScreenContainer>
+    );
+  }
+
+  const alunoAtual = aluno;
+
   return (
     <ScreenContainer>
       <EntityForm
@@ -62,7 +72,7 @@ export default function AlunoFormScreen({ mode, aluno }: AlunoFormScreenProps) {
             <StatusBanner message={mensagemSucesso} />
           ) : undefined
         }
-        onPrimaryPress={(values) => {
+        onPrimaryPress={async (values) => {
           const payload = {
             nome: values.nome,
             email: values.email,
@@ -70,16 +80,14 @@ export default function AlunoFormScreen({ mode, aluno }: AlunoFormScreenProps) {
           };
 
           if (mode === "create") {
-            createAluno(payload);
+            await createAluno(payload);
             setMensagemSucesso(
               "Aluno salvo com sucesso. Retornando para a listagem...",
             );
             return;
           }
 
-          if (aluno) {
-            updateAluno(aluno.id, payload);
-          }
+          await updateAluno(alunoAtual!.id, payload);
 
           setMensagemSucesso(
             "Aluno atualizado com sucesso. Retornando para a listagem...",

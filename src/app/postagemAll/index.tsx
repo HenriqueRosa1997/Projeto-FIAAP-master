@@ -1,5 +1,5 @@
-import HomePostagem from "@/Screens/Postagem/HomePostagem";
+import PostagemFeedScreen from "@/features/postagem/screens/PostagemFeedScreen";
 
 export default function PostagemAllPage() {
-  return <HomePostagem />;
+  return <PostagemFeedScreen />;
 }

@@ -1,5 +1,5 @@
-import HomeProfessor from "@/Screens/Professor/HomeProfessor";
+import ProfessorDashboardScreen from "@/features/professor/screens/ProfessorDashboardScreen";
 
 export default function ProfessorPage() {
-  return <HomeProfessor />;
+  return <ProfessorDashboardScreen />;
 }

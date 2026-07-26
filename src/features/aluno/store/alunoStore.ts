@@ -1,25 +1,24 @@
-import { mockAlunos } from "@/features/aluno/mocks/alunos";
-import { createMockCrudStore } from "@/shared/state/createMockCrudStore";
+import { alunoRepository } from "@/features/aluno/repository/alunoRepository";
 import { Aluno } from "@/shared/types/entities";
 
-const alunoStore = createMockCrudStore<Aluno>(mockAlunos);
-
 export function useAlunos() {
-  return alunoStore.useItems();
+  return alunoRepository.useItems();
 }
 
+export function useAlunosStatus() { return alunoRepository.useStatus(); }
+
 export function getAlunoById(id: string) {
-  return alunoStore.getById(id);
+  return alunoRepository.getById(id);
 }
 
 export function createAluno(item: Omit<Aluno, "id"> & { id?: string }) {
-  return alunoStore.create(item);
+  return alunoRepository.create(item);
 }
 
 export function updateAluno(id: string, updates: Partial<Omit<Aluno, "id">>) {
-  return alunoStore.update(id, updates);
+  return alunoRepository.update(id, updates);
 }
 
 export function removeAluno(id: string) {
-  alunoStore.remove(id);
+  return alunoRepository.remove(id);
 }

@@ -8,7 +8,7 @@ function getHeaderTitle(routeName: string) {
     login: "Login",
     "postagemAll/index": "Postagens",
     "postagemAll/[id]": "Visualizar Postagem",
-    "professor/index": "Professor",
+    "professor/index": "Administração",
     "professor/postagens/index": "Postagens",
     "professor/postagens/criar": "Criar Postagem",
     "professor/postagens/[id]/index": "Detalhar Postagem",
@@ -37,7 +37,7 @@ export default function RootLayout() {
 function RootStack() {
   const router = useRouter();
   const segments = useSegments();
-  const { user, initializing } = useAuth();
+  const { user, initializing, canAccessProfessorArea, isAdmin } = useAuth();
 
   useEffect(() => {
     if (initializing) {
@@ -45,18 +45,27 @@ function RootStack() {
     }
 
     const firstSegment = segments[0];
+    const secondSegment = segments[1];
     const inProfessorArea = firstSegment === "professor";
+    const inAdminArea = inProfessorArea && (
+      !secondSegment || secondSegment === "alunos" || secondSegment === "professores"
+    );
     const inLoginScreen = firstSegment === "login";
 
-    if (!user && inProfessorArea) {
+    if ((!user || !canAccessProfessorArea) && inProfessorArea) {
       router.replace("/login");
       return;
     }
 
-    if (user && inLoginScreen) {
-      router.replace("/professor");
+    if (user && !isAdmin && inAdminArea) {
+      router.replace("/professor/postagens");
+      return;
     }
-  }, [initializing, router, segments, user]);
+
+    if (user && inLoginScreen) {
+      router.replace(isAdmin ? "/professor" : "/professor/postagens");
+    }
+  }, [canAccessProfessorArea, initializing, isAdmin, router, segments, user]);
 
   if (initializing) {
     return null;

@@ -22,12 +22,14 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   title: {
-    fontSize: 28,
-    fontWeight: "700",
-    color: "#222222",
+    fontSize: 30,
+    fontWeight: "800",
+    letterSpacing: -0.5,
+    color: "#16253D",
   },
   subtitle: {
     fontSize: 14,
-    color: "#5E5E5E",
+    lineHeight: 20,
+    color: "#526075",
   },
 });

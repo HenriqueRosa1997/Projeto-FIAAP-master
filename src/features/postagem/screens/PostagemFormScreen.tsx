@@ -57,6 +57,16 @@ export default function PostagemFormScreen({
     return () => clearTimeout(timeout);
   }, [mensagemSucesso, router]);
 
+  if (mode === "edit" && !postagem) {
+    return (
+      <ScreenContainer>
+        <StatusBanner message="Postagem não encontrada." variant="error" />
+      </ScreenContainer>
+    );
+  }
+
+  const postagemAtual = postagem;
+
   return (
     <ScreenContainer>
       <EntityForm
@@ -75,7 +85,7 @@ export default function PostagemFormScreen({
             <StatusBanner message={mensagemSucesso} />
           ) : undefined
         }
-        onPrimaryPress={(values) => {
+        onPrimaryPress={async (values) => {
           const payload = {
             titulo: values.titulo,
             autor: values.autor,
@@ -86,16 +96,14 @@ export default function PostagemFormScreen({
           };
 
           if (mode === "create") {
-            createPostagem(payload);
+            await createPostagem(payload);
             setMensagemSucesso(
               "Postagem salva com sucesso. Retornando para a listagem...",
             );
             return;
           }
 
-          if (postagem) {
-            updatePostagem(postagem.id, payload);
-          }
+          await updatePostagem(postagemAtual!.id, payload);
 
           setMensagemSucesso(
             "Postagem atualizada com sucesso. Retornando para a listagem...",

@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 
 type StatusBannerProps = {
   message: string;
-  variant?: "success" | "info";
+  variant?: "success" | "info" | "error";
 };
 
 export default function StatusBanner({
@@ -11,9 +11,9 @@ export default function StatusBanner({
 }: StatusBannerProps) {
   return (
     <View
-      style={[styles.container, variant === "info" && styles.infoContainer]}
+      style={[styles.container, variant === "info" && styles.infoContainer, variant === "error" && styles.errorContainer]}
     >
-      <Text style={[styles.message, variant === "info" && styles.infoMessage]}>
+      <Text style={[styles.message, variant === "info" && styles.infoMessage, variant === "error" && styles.errorMessage]}>
         {message}
       </Text>
     </View>
@@ -41,4 +41,6 @@ const styles = StyleSheet.create({
   infoMessage: {
     color: "#1E63D5",
   },
+  errorContainer: { backgroundColor: "#FDECEC", borderColor: "#E7A1A1" },
+  errorMessage: { color: "#9C2525" },
 });

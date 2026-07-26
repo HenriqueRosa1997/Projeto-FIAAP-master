@@ -1,5 +1,5 @@
-import Alunos from "@/Screens/Professor/Alunos";
+import AlunoListScreen from "@/features/aluno/screens/AlunoListScreen";
 
 export default function ProfessorAlunosPage() {
-  return <Alunos />;
+  return <AlunoListScreen />;
 }

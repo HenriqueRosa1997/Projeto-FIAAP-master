@@ -1,6 +1,3 @@
-import { useAlunos } from "@/features/aluno/store/alunoStore";
-import { usePostagens } from "@/features/postagem/store/postagemStore";
-import { useProfessores } from "@/features/professor/store/professorStore";
 import ActionButton from "@/shared/ui/ActionButton";
 import EntityCard from "@/shared/ui/EntityCard";
 import ScreenContainer from "@/shared/ui/ScreenContainer";
@@ -10,118 +7,54 @@ import { StyleSheet, View } from "react-native";
 
 export default function ProfessorDashboardScreen() {
   const router = useRouter();
-  const alunos = useAlunos();
-  const postagens = usePostagens();
-  const professores = useProfessores();
-
-  const postagemEmDestaque = postagens[0];
-  const professorEmDestaque = professores[0];
-  const alunoEmDestaque = alunos[0];
 
   return (
     <ScreenContainer>
       <SectionHeader
-        title="Painel do Professor"
-        subtitle="Acesse rapidamente as principais areas de gerenciamento"
+        title="Administração"
+        subtitle="Escolha uma área para gerenciar"
       />
 
       <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <SectionHeader
-            title="Gestao de Postagens"
-            subtitle="Gerencie publicacoes e comunicados do mural"
-          />
-          <View style={styles.actionsRow}>
+        <EntityCard
+          title="Postagens"
+          subtitle="Conteúdo publicado"
+          description="Crie, edite e exclua as postagens do mural."
+          actions={
             <ActionButton
-              label="Nova Postagem"
-              onPress={() => router.push("/professor/postagens/criar")}
-            />
-            <ActionButton
-              label="Ver Detalhes"
-              variant="secondary"
-              onPress={() => router.push("/professor/postagens/1")}
-            />
-            <ActionButton
-              label="Listar"
-              variant="secondary"
+              label="Abrir postagens"
               onPress={() => router.push("/professor/postagens")}
             />
-          </View>
-        </View>
-
-        {postagemEmDestaque ? (
-          <EntityCard
-            title={postagemEmDestaque.titulo}
-            subtitle={`Autor: ${postagemEmDestaque.autor}`}
-            description={postagemEmDestaque.resumo}
-          />
-        ) : null}
+          }
+        />
       </View>
 
       <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <SectionHeader
-            title="Gestao de Professores"
-            subtitle="Cadastre e acompanhe os professores da plataforma"
-          />
-          <View style={styles.actionsRow}>
+        <EntityCard
+          title="Professores"
+          subtitle="Equipe docente"
+          description="Cadastre, edite e exclua professores da plataforma."
+          actions={
             <ActionButton
-              label="Novo Professor"
-              onPress={() => router.push("/professor/professores/criar")}
-            />
-            <ActionButton
-              label="Editar Perfil"
-              variant="secondary"
-              onPress={() => router.push("/professor/professores/1/editar")}
-            />
-            <ActionButton
-              label="Listar"
-              variant="secondary"
+              label="Abrir professores"
               onPress={() => router.push("/professor/professores")}
             />
-          </View>
-        </View>
-
-        {professorEmDestaque ? (
-          <EntityCard
-            title={professorEmDestaque.nome}
-            subtitle={professorEmDestaque.email}
-            description={`Especialidade: ${professorEmDestaque.especialidade}`}
-          />
-        ) : null}
+          }
+        />
       </View>
 
       <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <SectionHeader
-            title="Gestao de Alunos"
-            subtitle="Cadastre e acompanhe os alunos vinculados ao sistema"
-          />
-          <View style={styles.actionsRow}>
+        <EntityCard
+          title="Alunos"
+          subtitle="Cadastros acadêmicos"
+          description="Cadastre, edite e exclua alunos do sistema."
+          actions={
             <ActionButton
-              label="Novo Aluno"
-              onPress={() => router.push("/professor/alunos/criar")}
-            />
-            <ActionButton
-              label="Visualizar"
-              variant="secondary"
-              onPress={() => router.push("/professor/alunos/1")}
-            />
-            <ActionButton
-              label="Listar"
-              variant="secondary"
+              label="Abrir alunos"
               onPress={() => router.push("/professor/alunos")}
             />
-          </View>
-        </View>
-
-        {alunoEmDestaque ? (
-          <EntityCard
-            title={alunoEmDestaque.nome}
-            subtitle={`${alunoEmDestaque.email} • ${alunoEmDestaque.turma}`}
-            description={`Turma: ${alunoEmDestaque.turma}`}
-          />
-        ) : null}
+          }
+        />
       </View>
     </ScreenContainer>
   );
@@ -130,13 +63,5 @@ export default function ProfessorDashboardScreen() {
 const styles = StyleSheet.create({
   section: {
     gap: 14,
-  },
-  sectionHeader: {
-    gap: 12,
-  },
-  actionsRow: {
-    flexDirection: "row",
-    gap: 12,
-    flexWrap: "wrap",
   },
 });

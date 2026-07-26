@@ -1,5 +1,5 @@
-import Posts from "@/Screens/Professor/Posts";
+import PostagemListScreen from "@/features/postagem/screens/PostagemListScreen";
 
 export default function ProfessorPostagensPage() {
-  return <Posts />;
+  return <PostagemListScreen />;
 }

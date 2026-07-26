@@ -4,12 +4,14 @@ type ActionButtonProps = {
   label: string;
   onPress?: () => void;
   variant?: "primary" | "secondary" | "danger";
+  disabled?: boolean;
 };
 
 export default function ActionButton({
   label,
   onPress,
   variant = "primary",
+  disabled = false,
 }: ActionButtonProps) {
   return (
     <Pressable
@@ -17,8 +19,10 @@ export default function ActionButton({
         styles.button,
         variant === "secondary" && styles.secondaryButton,
         variant === "danger" && styles.dangerButton,
+        disabled && styles.disabled,
       ]}
       onPress={onPress}
+      disabled={disabled}
     >
       <Text
         style={[
@@ -58,4 +62,5 @@ const styles = StyleSheet.create({
   dangerLabel: {
     color: "#C63D3D",
   },
+  disabled: { opacity: 0.6 },
 });

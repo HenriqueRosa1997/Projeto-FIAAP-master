@@ -18,6 +18,7 @@ export default function ProfessorDetailsScreen({
   const router = useRouter();
   const [foiExcluido, setFoiExcluido] = useState(false);
   const [modalAberto, setModalAberto] = useState(false);
+  const [erro, setErro] = useState("");
 
   useEffect(() => {
     if (!foiExcluido) {
@@ -39,15 +40,20 @@ export default function ProfessorDetailsScreen({
         message="Deseja realmente excluir este professor?"
         confirmLabel="Excluir"
         onCancel={() => setModalAberto(false)}
-        onConfirm={() => {
+        onConfirm={async () => {
           if (!professor) {
             setModalAberto(false);
             return;
           }
 
-          removeProfessor(professor.id);
-          setModalAberto(false);
-          setFoiExcluido(true);
+          try {
+            await removeProfessor(professor.id);
+            setModalAberto(false);
+            setFoiExcluido(true);
+          } catch {
+            setModalAberto(false);
+            setErro("Não foi possível excluir o professor. Tente novamente.");
+          }
         }}
       />
 
@@ -56,7 +62,7 @@ export default function ProfessorDetailsScreen({
         topContent={
           foiExcluido ? (
             <StatusBanner message="Professor excluido com sucesso. Retornando para a listagem..." />
-          ) : undefined
+          ) : erro ? <StatusBanner message={erro} variant="error" /> : undefined
         }
         items={[
           { label: "Nome", value: professor?.nome ?? "-" },

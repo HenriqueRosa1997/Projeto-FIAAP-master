@@ -16,6 +16,7 @@ export default function AlunoDetailsScreen({ aluno }: AlunoDetailsScreenProps) {
   const router = useRouter();
   const [foiExcluido, setFoiExcluido] = useState(false);
   const [modalAberto, setModalAberto] = useState(false);
+  const [erro, setErro] = useState("");
 
   useEffect(() => {
     if (!foiExcluido) {
@@ -37,15 +38,20 @@ export default function AlunoDetailsScreen({ aluno }: AlunoDetailsScreenProps) {
         message="Deseja realmente excluir este aluno?"
         confirmLabel="Excluir"
         onCancel={() => setModalAberto(false)}
-        onConfirm={() => {
+        onConfirm={async () => {
           if (!aluno) {
             setModalAberto(false);
             return;
           }
 
-          removeAluno(aluno.id);
-          setModalAberto(false);
-          setFoiExcluido(true);
+          try {
+            await removeAluno(aluno.id);
+            setModalAberto(false);
+            setFoiExcluido(true);
+          } catch {
+            setModalAberto(false);
+            setErro("Não foi possível excluir o aluno. Tente novamente.");
+          }
         }}
       />
 
@@ -54,7 +60,7 @@ export default function AlunoDetailsScreen({ aluno }: AlunoDetailsScreenProps) {
         topContent={
           foiExcluido ? (
             <StatusBanner message="Aluno excluido com sucesso. Retornando para a listagem..." />
-          ) : undefined
+          ) : erro ? <StatusBanner message={erro} variant="error" /> : undefined
         }
         items={[
           { label: "Nome", value: aluno?.nome ?? "-" },

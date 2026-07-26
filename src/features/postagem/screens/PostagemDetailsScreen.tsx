@@ -22,6 +22,7 @@ export default function PostagemDetailsScreen({
   const router = useRouter();
   const [foiExcluida, setFoiExcluida] = useState(false);
   const [modalAberto, setModalAberto] = useState(false);
+  const [erro, setErro] = useState("");
 
   useEffect(() => {
     if (!foiExcluida) {
@@ -44,15 +45,20 @@ export default function PostagemDetailsScreen({
           message="Deseja realmente excluir esta postagem?"
           confirmLabel="Excluir"
           onCancel={() => setModalAberto(false)}
-          onConfirm={() => {
+          onConfirm={async () => {
             if (!postagem) {
               setModalAberto(false);
               return;
             }
 
-            removePostagem(postagem.id);
-            setModalAberto(false);
-            setFoiExcluida(true);
+            try {
+              await removePostagem(postagem.id);
+              setModalAberto(false);
+              setFoiExcluida(true);
+            } catch {
+              setModalAberto(false);
+              setErro("Não foi possível excluir a postagem. Tente novamente.");
+            }
           }}
         />
       ) : null}
@@ -62,7 +68,7 @@ export default function PostagemDetailsScreen({
         topContent={
           foiExcluida ? (
             <StatusBanner message="Postagem excluida com sucesso. Retornando para a listagem..." />
-          ) : undefined
+          ) : erro ? <StatusBanner message={erro} variant="error" /> : undefined
         }
         items={[
           { label: "Titulo", value: postagem?.titulo ?? "-" },

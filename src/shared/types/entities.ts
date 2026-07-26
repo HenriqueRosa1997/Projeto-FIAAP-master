@@ -26,6 +26,9 @@ export type FormFieldConfig = {
   label: string;
   placeholder: string;
   multiline?: boolean;
+  secureTextEntry?: boolean;
+  autoCapitalize?: "none" | "sentences" | "words" | "characters";
+  keyboardType?: "default" | "email-address";
 };
 
 export type DetailItem = {

@@ -17,11 +17,14 @@ export default function ScreenContainer({ children }: ScreenContainerProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E7E7E7",
+    backgroundColor: "#F4F7FC",
   },
   content: {
+    width: "100%",
+    maxWidth: 1180,
+    alignSelf: "center",
     paddingHorizontal: 20,
-    paddingVertical: 24,
-    gap: 18,
+    paddingVertical: 32,
+    gap: 20,
   },
 });
