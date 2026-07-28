@@ -119,12 +119,16 @@ export function createFirestoreCrudRepository<T extends EntityWithId>(
     return items;
   }
 
+  function getStatusSnapshot() {
+    return status;
+  }
+
   function useItems() {
     return useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
   }
 
   function useStatus() {
-    return useSyncExternalStore(subscribe, () => status, () => status);
+    return useSyncExternalStore(subscribe, getStatusSnapshot, getStatusSnapshot);
   }
 
   function getById(id: string) {

@@ -18,20 +18,22 @@ type AuthContextValue = {
   logout: () => Promise<void>;
 };
 
-async function isUserAdmin(user: User) {
-  const tokenResult = await getIdTokenResult(user, true);
-  return tokenResult.claims.role === "admin";
-}
+async function getAccessProfile(user: User) {
+  const tokenResult = await getIdTokenResult(user);
+  const configuredAdminEmail = process.env.EXPO_PUBLIC_ADMIN_EMAIL
+    ?.trim()
+    .toLowerCase();
+  const isConfiguredAdmin = Boolean(
+    configuredAdminEmail && user.email?.toLowerCase() === configuredAdminEmail,
+  );
+  const isAdmin = tokenResult.claims.role === "admin" || isConfiguredAdmin;
 
-async function isProfessor(user: User) {
-  const tokenResult = await getIdTokenResult(user, true);
-
-  if (tokenResult.claims.role === "admin" || tokenResult.claims.role === "teacher") {
-    return true;
+  if (isAdmin || tokenResult.claims.role === "teacher") {
+    return { isAdmin, isProfessor: true };
   }
 
   const profile = await getDoc(doc(db, "professores", user.uid));
-  return profile.exists();
+  return { isAdmin: false, isProfessor: profile.exists() };
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -57,14 +59,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       try {
-        const [userIsAdmin, userIsProfessor] = await Promise.all([
-          isUserAdmin(currentUser),
-          isProfessor(currentUser),
-        ]);
+        const accessProfile = await getAccessProfile(currentUser);
 
         if (!cancelled) {
-          setCanAccessProfessorArea(userIsAdmin || userIsProfessor);
-          setIsAdmin(userIsAdmin);
+          setCanAccessProfessorArea(accessProfile.isProfessor);
+          setIsAdmin(accessProfile.isAdmin);
           setInitializing(false);
         }
       } catch {

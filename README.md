@@ -64,7 +64,13 @@ Não há variáveis de ambiente obrigatórias no estado atual do código. Se o p
 
 ### Perfis de acesso
 
-Não há variáveis públicas obrigatórias no aplicativo. A autorização é feita por *custom claims* do Firebase Auth, validadas também pelas regras do Firestore. Crie o primeiro administrador com o script de seed descrito abaixo.
+Em desenvolvimento, defina no `.env` o e-mail que deve receber os controles administrativos na interface:
+
+```bash
+EXPO_PUBLIC_ADMIN_EMAIL=admin@exemplo.com
+```
+
+Use [.env.example](.env.example) como referência e reinicie o Expo após alterar a variável. Em produção, crie a custom claim `role: "admin"` com o script de seed descrito abaixo, pois as regras do Firestore validam essa claim no servidor.
 
 ### Cadastro de professores
 
