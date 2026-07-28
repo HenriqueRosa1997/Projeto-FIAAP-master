@@ -60,7 +60,7 @@ export default function ProfessorListScreen() {
       <View style={styles.headerRow}>
         <SectionHeader title="Professores" />
         <ActionButton
-          label="Cadastrar Professor"
+          label="Criar conta de professor"
           onPress={() => router.push("/professor/professores/criar")}
         />
       </View>

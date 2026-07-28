@@ -75,7 +75,7 @@ export default function ProfessorFormScreen({
   return (
     <ScreenContainer>
       <EntityForm
-        title={mode === "create" ? "Cadastrar Professor" : "Editar Professor"}
+        title={mode === "create" ? "Criar conta de professor" : "Editar Professor"}
         subtitle={mode === "create" ? "Os dados também criam o acesso de login" : "Atualize os dados do professor"}
         fields={fields}
         initialValues={{

@@ -83,6 +83,12 @@ export default function PostagemDetailsScreen({
               variant="secondary"
               onPress={() => router.replace(backHref)}
             />
+            {allowDelete && postagem && !foiExcluida ? (
+              <ActionButton
+                label="Editar"
+                onPress={() => router.push(`/professor/postagens/${postagem.id}/editar` as const)}
+              />
+            ) : null}
             {allowDelete && !foiExcluida ? (
               <ActionButton
                 label="Excluir"
