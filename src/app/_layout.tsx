@@ -3,28 +3,14 @@ import AppHeader from "@/shared/ui/AppHeader";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
 
-function getHeaderTitle(routeName: string) {
-  const titles: Record<string, string> = {
-    login: "Login",
-    "postagemAll/index": "Postagens",
-    "postagemAll/[id]": "Visualizar Postagem",
-    "professor/index": "Administração",
-    "professor/postagens/index": "Postagens",
-    "professor/postagens/criar": "Criar Postagem",
-    "professor/postagens/[id]/index": "Detalhar Postagem",
-    "professor/postagens/[id]/editar": "Editar Postagem",
-    "professor/alunos/index": "Alunos",
-    "professor/alunos/criar": "Criar Aluno",
-    "professor/alunos/[id]/index": "Detalhar Aluno",
-    "professor/alunos/[id]/editar": "Editar Aluno",
-    "professor/professores/index": "Professores",
-    "professor/professores/criar": "Criar Professor",
-    "professor/professores/[id]/index": "Detalhar Professor",
-    "professor/professores/[id]/editar": "Editar Professor",
-  };
-
-  return titles[routeName] ?? "Learn.io";
+function renderAppHeader() {
+  return <AppHeader />;
 }
+
+const stackScreenOptions = {
+  headerShadowVisible: false,
+  header: renderAppHeader,
+};
 
 export default function RootLayout() {
   return (
@@ -37,6 +23,7 @@ export default function RootLayout() {
 function RootStack() {
   const router = useRouter();
   const segments = useSegments();
+  const routeKey = segments.join("/");
   const { user, initializing, canAccessProfessorArea, isAdmin } = useAuth();
 
   useEffect(() => {
@@ -44,8 +31,7 @@ function RootStack() {
       return;
     }
 
-    const firstSegment = segments[0];
-    const secondSegment = segments[1];
+    const [firstSegment, secondSegment] = routeKey.split("/");
     const inProfessorArea = firstSegment === "professor";
     const inAdminArea = inProfessorArea && (
       !secondSegment || secondSegment === "alunos" || secondSegment === "professores"
@@ -62,10 +48,10 @@ function RootStack() {
       return;
     }
 
-    if (user && inLoginScreen) {
+    if (user && canAccessProfessorArea && inLoginScreen) {
       router.replace(isAdmin ? "/professor" : "/professor/postagens");
     }
-  }, [canAccessProfessorArea, initializing, isAdmin, router, segments, user]);
+  }, [canAccessProfessorArea, initializing, isAdmin, routeKey, router, user]);
 
   if (initializing) {
     return null;
@@ -73,10 +59,7 @@ function RootStack() {
 
   return (
     <Stack
-      screenOptions={({ route }) => ({
-        headerShadowVisible: false,
-        header: () => <AppHeader title={getHeaderTitle(route.name)} />,
-      })}
+      screenOptions={stackScreenOptions}
     >
       <Stack.Screen name="postagemAll/index" />
       <Stack.Screen name="login" />

@@ -4,13 +4,37 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-type AppHeaderProps = {
-  title: string;
-};
+function getHeaderTitle(segments: string[]) {
+  const [area, section, idOrAction, action] = segments;
 
-export default function AppHeader({ title }: AppHeaderProps) {
+  if (area === "login") return "Login";
+  if (area === "postagemAll") return section ? "Visualizar Postagem" : "Postagens";
+  if (area !== "professor") return "Learn.io";
+  if (!section) return "Administração";
+
+  const labels = {
+    postagens: "Postagem",
+    alunos: "Aluno",
+    professores: "Professor",
+  } as const;
+  const pluralLabels = {
+    postagens: "Postagens",
+    alunos: "Alunos",
+    professores: "Professores",
+  } as const;
+  const label = labels[section as keyof typeof labels];
+
+  if (!label) return "Administração";
+  if (!idOrAction) return pluralLabels[section as keyof typeof pluralLabels];
+  if (idOrAction === "criar") return `Criar ${label}`;
+  if (action === "editar") return `Editar ${label}`;
+  return `Detalhar ${label}`;
+}
+
+export default function AppHeader() {
   const { user, isAdmin, logout } = useAuth();
   const segments = useSegments();
+  const title = getHeaderTitle([...segments]);
   const activeSection = segments[0] === "professor" ? segments[1] : undefined;
   const isSectionLanding =
     (activeSection === "postagens" && title === "Postagens") ||
