@@ -17,7 +17,6 @@
     "expo-symbols": "~57.0.1",
     "expo-system-ui": "~57.0.1",
     "expo-web-browser": "~57.0.1",
-    "firebase": "^12.16.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-native": "0.86.0",
@@ -34,7 +33,6 @@
     "@types/react-native-vector-icons": "^6.4.18",
     "eslint": "^9.39.5",
     "eslint-config-expo": "^57.0.0",
-    "firebase-admin": "^14.2.0",
     "typescript": "~6.0.3"
   },
   "scripts": {
@@ -43,8 +41,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "expo lint",
-    "seed:admin": "node scripts/seed-admin.mjs"
+    "lint": "expo lint"
   },
   "private": true
 }
