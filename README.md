@@ -4,7 +4,7 @@ Aplicação mobile desenvolvida com React Native e Expo para a plataforma Learn.
 
 ## Visão geral
 
-O projeto foi estruturado para funcionar como a versão final do desafio, com navegação baseada em arquivos, Firebase Auth para login e Firestore como base de dados.
+O projeto usa navegação baseada em arquivos, uma API REST em Fastify e PostgreSQL.
 
 Fluxos principais:
 
@@ -22,8 +22,8 @@ Fluxos principais:
 - React Native 0.86
 - Expo Router
 - TypeScript
-- Firebase Auth
-- Firestore
+- API REST (Fastify)
+- PostgreSQL / TypeORM
 - AsyncStorage para persistência da sessão no mobile
 
 ## Requisitos
@@ -53,66 +53,33 @@ npm run web
 npm run lint
 ```
 
-## Configuração Firebase
+## Configuração da API
 
-O projeto já vem configurado com Firebase nas duas plataformas:
-
-- [src/services/firebase.native.ts](src/services/firebase.native.ts)
-- [src/services/firebase.web.ts](src/services/firebase.web.ts)
-
-Não há variáveis de ambiente obrigatórias no estado atual do código. Se o projeto for apontado para outro backend Firebase, a configuração deve ser atualizada nesses arquivos.
-
-### Perfis de acesso
-
-Em desenvolvimento, defina no `.env` o e-mail que deve receber os controles administrativos na interface:
+Copie [.env.example](.env.example) para `.env` e defina a URL que o dispositivo consegue acessar. Em Android físico, use o IP local da máquina em vez de `localhost`.
 
 ```bash
-EXPO_PUBLIC_ADMIN_EMAIL=admin@exemplo.com
+EXPO_PUBLIC_API_URL=http://192.168.0.10:3001
 ```
 
-Use [.env.example](.env.example) como referência e reinicie o Expo após alterar a variável. Em produção, crie a custom claim `role: "admin"` com o script de seed descrito abaixo, pois as regras do Firestore validam essa claim no servidor.
-
-### Cadastro de professores
-
-Não há cadastro público. Somente administradores podem usar a aba **Professores** para criar uma conta docente. O formulário solicita uma senha inicial e chama a Cloud Function `createProfessorAccount`, que cria a conta no Firebase Authentication e o perfil em `professores`.
-
-Antes do deploy, copie `functions/.env.example` para `functions/.env` e configure o mesmo e-mail de admin. Em seguida, instale as dependências e publique a Function:
+Em outro terminal, configure e execute a API:
 
 ```bash
-cd functions
+cd api
+cp .env.example .env
 npm install
-cd ..
-firebase deploy --only firestore:rules,functions:createProfessorAccount
+npm run start:dev
 ```
 
-#### Seed do primeiro administrador
-
-Use uma credencial de conta de serviço do Firebase, sem adicioná-la ao Git, para criar ou promover a conta inicial:
-
-```bash
-npm run seed:admin -- \
-  --email admin@exemplo.com \
-  --password "uma-senha-forte" \
-  --nome "Administrador" \
-  --especialidade "Gestão" \
-  --service-account /caminho/seguro/service-account.json
-```
-
-Também é possível usar credenciais padrão da aplicação por meio de `GOOGLE_APPLICATION_CREDENTIALS`; nesse caso, omita `--service-account`. O script concede a claim e cria/atualiza `professores/{uid}`.
+As migrations são executadas na inicialização. Configure as credenciais PostgreSQL em `api/.env`.
 
 ## Autenticação e acesso
 
-O login do professor é feito com Firebase Auth em [src/Screens/Login/Login.tsx](src/Screens/Login/Login.tsx). Todo professor autenticado pode criar, editar e listar postagens. A sessão é preservada no mobile com AsyncStorage.
+O login do professor usa `POST /user/signin`; o JWT retornado é preservado no mobile com AsyncStorage. Todo professor autenticado pode criar, editar e listar postagens.
 
 A área administrativa é protegida em [src/shared/context/AuthContext.tsx](src/shared/context/AuthContext.tsx) e [src/app/_layout.tsx](src/app/_layout.tsx):
 
-- qualquer pessoa pode ler postagens em `/postagemAll`, inclusive sem sessão
+- a API valida o JWT e o perfil `PROFESSOR` nos endpoints administrativos
 - usuários sem sessão são redirecionados para `/login` ao acessar `/professor`
-- professores autenticados acessam o gerenciamento de postagens
-- a custom claim `role: "admin"` libera a administração de professores e alunos
-- a custom claim `role: "teacher"`, ou um perfil próprio em `professores/{uid}`, libera o gerenciamento de postagens
-
-As regras em [firestore.rules](firestore.rules) impedem que usuários sem perfil docente alterem postagens e reservam os cadastros de alunos e professores para administradores.
 
 ## Rotas
 
@@ -159,7 +126,7 @@ Cada domínio concentra:
 
 ### Camada compartilhada
 
-- [src/shared/repositories/createFirestoreCrudRepository.ts](src/shared/repositories/createFirestoreCrudRepository.ts) centraliza o CRUD com Firestore
+- [src/shared/repositories/createApiCrudRepository.ts](src/shared/repositories/createApiCrudRepository.ts) centraliza o CRUD REST
 - [src/shared/context/AuthContext.tsx](src/shared/context/AuthContext.tsx) concentra autenticação e autorização
 - [src/shared/ui](src/shared/ui) reúne os componentes reutilizáveis da interface
 
