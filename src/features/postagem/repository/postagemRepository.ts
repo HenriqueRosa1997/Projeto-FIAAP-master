@@ -1,6 +1,4 @@
-import { createFirestoreCrudRepository } from "@/shared/repositories/createFirestoreCrudRepository";
+import { createApiCrudRepository } from "@/shared/repositories/createApiCrudRepository";
 import { Postagem } from "@/shared/types/entities";
 
-export const postagemRepository = createFirestoreCrudRepository<Postagem>(
-  "postagens",
-);
+export const postagemRepository = createApiCrudRepository<Postagem>("/posts");
